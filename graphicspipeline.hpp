@@ -11,7 +11,7 @@ template<typename State>
 class graphicspipe {
     public:
         graphicspipe<State>();
-        graphicspipe<State>(State initialState, std::function<void(State&)> evolve, std::function<frame(State*)> rend);
+        graphicspipe<State>(State* initialState, std::function<void(State&)> evolve, std::function<frame(State*)> rend);
         ~graphicspipe();
         frame current;
         void start();
@@ -21,7 +21,7 @@ class graphicspipe {
         std::function<frame(State*)> render;
         void rendloop();
         std::thread gloop;
-        physicspipe<State> phys;
+        physicspipe<State>* phys;
 };
 
 #endif //GRAPHICS_H

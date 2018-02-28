@@ -2,14 +2,14 @@
 
 template<typename State>
 physicspipe<State>::physicspipe() {
-    step = [](State& s) { };
+    step = [](State* s) { };
     current = new State();
 }
 
 template<typename State>
-physicspipe<State>::physicspipe(State initialState, std::function<void(State&)> evolve) {
+physicspipe<State>::physicspipe(State* initialState, std::function<void(State&)> evolve) {
     step = evolve;
-    current = &initialState;
+    current = initialState;
 }
 
 template<typename State>
