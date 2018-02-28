@@ -7,7 +7,7 @@ physicspipe<State>::physicspipe() {
 }
 
 template<typename State>
-physicspipe<State>::physicspipe(State* initialState, std::function<void(State&)> evolve) {
+physicspipe<State>::physicspipe(State* initialState, std::function<void(State*)> evolve) {
     step = evolve;
     current = initialState;
 }

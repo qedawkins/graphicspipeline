@@ -10,25 +10,24 @@ struct State {
     int count = 0;
 };
 
-void evolve(State& s) {
-    s.count += 1;
+void evolve(State* s) {
+    s->count += 1;
 }
 
-frame render(State* s) {
-    frame* fr = new frame();
+frame* render(State* s, frame* fr) {
     fr->count = s->count;
-    return *fr;
+    return fr;
 }
 
 int main(int argc, char** argv) {
     State* is = new State();
-    std::function<void(State&)> evo = evolve;
-    std::function<frame(State*)> rend = render;
+    std::function<void(State*)> evo = evolve;
+    std::function<frame*(State*,frame*)> rend = render;
     graphicspipe<State>* graph = new graphicspipe<State>(is, evo, rend);
     auto begin = std::chrono::high_resolution_clock::now();
     graph->start();
-    while(std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now()-begin).count() < 1000) {
-        printf("\r%d", graph->current.count);
+    while(std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now()-begin).count() < 10000) {
+        printf("\r%d", graph->current->count);
     }
     graph->pause();
     return 0;

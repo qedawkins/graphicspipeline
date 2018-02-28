@@ -11,14 +11,14 @@ template<typename State>
 class graphicspipe {
     public:
         graphicspipe<State>();
-        graphicspipe<State>(State* initialState, std::function<void(State&)> evolve, std::function<frame(State*)> rend);
+        graphicspipe<State>(State* initialState, std::function<void(State*)> evolve, std::function<frame*(State*,frame*)> rend);
         ~graphicspipe();
-        frame current;
+        frame* current;
         void start();
         void pause();
     private:
         bool loop = false;
-        std::function<frame(State*)> render;
+        std::function<frame*(State*,frame*)> render;
         void rendloop();
         std::thread gloop;
         physicspipe<State>* phys;

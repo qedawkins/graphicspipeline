@@ -9,7 +9,7 @@ template<typename State>
 class physicspipe {
     public:
         physicspipe<State>();
-        physicspipe<State>(State* initialState, std::function<void(State&)> evolve);
+        physicspipe<State>(State* initialState, std::function<void(State*)> evolve);
         ~physicspipe();
         State* current;
         void start();
@@ -17,7 +17,7 @@ class physicspipe {
     private:
         float ms = 5.0;
         bool loop = false;
-        std::function<void(State&)> step;
+        std::function<void(State*)> step;
         void steploop();
         std::thread sloop;
 };
