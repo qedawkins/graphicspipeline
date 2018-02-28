@@ -5,17 +5,18 @@
 #include "graphicspipeline.cpp"
 #include "physicspipeline.hpp"
 #include "physicspipeline.cpp"
-
-struct State {
-    int count = 0;
-};
+#include "state.hpp"
 
 void evolve(State* s) {
-    s->count += 1;
+    s->pos = ((s->pos+1) & (~(!(s->pos >> 4))+1));
 }
 
 frame* render(State* s, frame* fr) {
-    fr->count = s->count;
+    printf("\r");
+    for(int i = 0; i < s->pos; i++) {
+        printf(" ");
+    }
+    printf("%c", s->move);
     return fr;
 }
 
@@ -27,7 +28,7 @@ int main(int argc, char** argv) {
     auto begin = std::chrono::high_resolution_clock::now();
     graph->start();
     while(std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now()-begin).count() < 10000) {
-        printf("\r%d", graph->current->count);
+        //printf("\r%d", graph->current);
     }
     graph->pause();
     return 0;
