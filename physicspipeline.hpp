@@ -15,7 +15,7 @@ class physicspipe {
         void start();
         void pause();
     private:
-        float ms = 50.0;
+        float ms = 1.0;
         bool loop = false;
         std::function<void(State*)> step;
         void steploop();

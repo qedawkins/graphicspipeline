@@ -5,7 +5,7 @@ class frame {
     public:
         frame();
         ~frame();
-        void operator=(frame f);
+        int count;
     private:
 };
 

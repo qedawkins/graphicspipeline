@@ -5,11 +5,11 @@ graphicspipe<State>::graphicspipe() {
 }
 
 template<typename State>
-graphicspipe<State>::graphicspipe(State* initialState, std::function<void(State*)> evolve, std::function<frame*(State*,frame*)> rend) {
+graphicspipe<State>::graphicspipe(State* initialState, std::function<void(State*)> evolve, std::function<void(State*,std::unique_ptr<frame>&)> rend) {
     render = rend;
-    phys = new physicspipe<State>(initialState, evolve);
-    frame* fr = new frame();
-    current = render(initialState, fr);
+    phys = std::unique_ptr<physicspipe<State> >(new physicspipe<State>(initialState, evolve));
+    current = std::unique_ptr<frame>(new frame());
+    render(initialState, current);
 }
 
 template<typename State>
@@ -20,7 +20,7 @@ graphicspipe<State>::~graphicspipe() {
 template<typename State>
 void graphicspipe<State>::rendloop() {
     while(loop) {
-        current = render(phys->current, current);
+        render(phys->current, current);
     }
 }
 

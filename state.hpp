@@ -3,8 +3,9 @@
 
 class State {
     public:
-    int pos = 0;
-    char move = '~';
+    //int pos = 0;
+    //char move = '~';
+    int count = 0;
 };
 
 #endif //STATE_H
