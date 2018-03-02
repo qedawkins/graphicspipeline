@@ -15,10 +15,12 @@ class physicspipe {
         void start();
         void pause();
     private:
-        float ms = 1.0;
+        std::chrono::nanoseconds ns = std::chrono::nanoseconds(500000);
+        std::chrono::milliseconds ms = std::chrono::milliseconds(10);
         bool loop = false;
         std::function<void(State*)> step;
         void steploop();
+        void steploopwait();
         std::thread sloop;
 };
 

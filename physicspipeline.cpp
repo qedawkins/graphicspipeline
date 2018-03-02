@@ -18,12 +18,28 @@ physicspipe<State>::~physicspipe() {
 }
 
 template<typename State>
+void physicspipe<State>::steploopwait() {
+    auto wait = std::chrono::high_resolution_clock::now() + ns;
+    auto start = std::chrono::high_resolution_clock::now();
+    auto end = std::chrono::high_resolution_clock::now();
+    while(loop) {
+        end = std::chrono::high_resolution_clock::now();
+        if(std::chrono::duration<double, std::milli>(end-start) > ms) {
+            start = end;
+            wait = start + ns;
+            step(current);
+            std::this_thread::sleep_until(wait);
+        }
+    }
+}
+
+template<typename State>
 void physicspipe<State>::steploop() {
     auto start = std::chrono::high_resolution_clock::now();
     auto end = std::chrono::high_resolution_clock::now();
     while(loop) {
         end = std::chrono::high_resolution_clock::now();
-        if(std::chrono::duration<double, std::milli>(end-start).count() > ms) {
+        if(std::chrono::duration<double, std::milli>(end-start) > ms) {
             start = end;
             step(current);
         }
