@@ -6,3 +6,7 @@ frame::frame() {
 
 frame::~frame() {
 }
+
+void frame::display() {
+    printf("\r%d", count);
+}

@@ -4,6 +4,7 @@
 #include<thread>
 #include<functional>
 #include<chrono>
+#include<atomic>
 #include "physicspipeline.hpp"
 #include "frame.hpp"
 
@@ -14,10 +15,11 @@ class graphicspipe {
         graphicspipe<State>(State* initialState, std::function<void(State*)> evolve, std::function<void(State*,std::unique_ptr<frame>&)> rend);
         ~graphicspipe();
         std::unique_ptr<frame> current;
+        std::atomic<bool> choose;
         void start();
         void pause();
     private:
-        bool loop = false;
+        std::atomic<bool> loop;
         std::function<void(State*,std::unique_ptr<frame>&)> render;
         void rendloop();
         std::thread gloop;
