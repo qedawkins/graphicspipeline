@@ -27,12 +27,13 @@ void lockThread() {
 
 int main(int argc, char** argv) {
     State* is = new State();
+    std::shared_ptr<SDL_Event> e = std::make_shared<SDL_Event>();
     is->quit = &quit;
+    is->event = e;
     graphicspipe<State>* graph = new graphicspipe<State>(is, render, SCREEN_WIDTH, SCREEN_HEIGHT);
     graph->start();
     std::thread wait(lockThread);
     wait.join();
-    //std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(std::chrono::milliseconds(10000)));
     graph->pause();
     return 0;
 }
