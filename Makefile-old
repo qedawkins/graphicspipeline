@@ -1,0 +1,21 @@
+CXXFLAGS=-Wall -std=c++17
+CXX=clang++
+DEBUG=-Wall -g
+OFILES=state.o physicspipeline.o graphicspipeline.o main.o
+LINKER_FLAGS=-lSDL2
+.SUFFIXES: .o .cpp
+.PHONY: clean
+
+test: $(OFILES)
+	$(CXX) $(DEBUG) $(OFILES) $(LINKER_FLAGS) -o test -pthreads
+	-rm -f *.o
+
+clean:
+	-rm -f *.o *~
+
+graphicspipeline.o: graphicspipeline.cpp graphicspipeline.hpp \
+  physicspipeline.hpp
+main.o: main.cpp graphicspipeline.hpp physicspipeline.hpp state.hpp
+physicspipeline.o: physicspipeline.cpp physicspipeline.hpp
+state.o: state.cpp
+

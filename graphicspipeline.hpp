@@ -1,29 +1,29 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include<thread>
-#include<functional>
-#include<chrono>
-#include<atomic>
+#include<stdexcept>
 #include "physicspipeline.hpp"
-#include "frame.hpp"
+#include "physicspipeline.cpp"
+#include "windowresources.hpp"
 
 template<typename State>
 class graphicspipe {
     public:
-        graphicspipe<State>();
-        graphicspipe<State>(State* initialState, std::function<void(State*)> evolve, std::function<void(State*,std::unique_ptr<frame>&)> rend);
+        graphicspipe<State>() = default;
+        graphicspipe<State>(State* initialState, std::function<void(State*)> evolve, std::function<void(State*, SDL_Surface*)> rend, const int width, const int height);
         ~graphicspipe();
-        std::unique_ptr<frame> current;
-        std::atomic<bool> choose;
         void start();
         void pause();
     private:
+        int s_width;
+        int s_height;
         std::atomic<bool> loop;
-        std::function<void(State*,std::unique_ptr<frame>&)> render;
+        std::function<void(State*,SDL_Surface*)> render;
         void rendloop();
         std::thread gloop;
         std::unique_ptr<physicspipe<State> > phys;
+        sdl2::window_ptr_t window;
+        SDL_Surface* surface;
 };
 
 #endif //GRAPHICS_H
