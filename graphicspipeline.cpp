@@ -1,17 +1,20 @@
 #include "graphicspipeline.hpp"
 
 template<typename State>
-graphicspipe<State>::graphicspipe(State* initialState, std::function<void(State*, SDL_Surface*)> rend, const int width, const int height) :
-    window(sdl2::make_window("pong", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN)) {
+graphicspipe<State>::graphicspipe(State* initialState, std::function<void(State*, SDL_Surface*, SDL_Renderer*)> rend, const int width, const int height) :
+    window(sdl2::make_window("pong", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN)),
+    renderer(sdl2::make_renderer(window.get(), -1, 0)) {
     render = rend;
     phys = std::unique_ptr<physicspipe<State> >(new physicspipe<State>(initialState));
     s_width = width;
     s_height = height;
     if(window == nullptr)
         throw std::runtime_error("window creation failed");
+    if(renderer == nullptr)
+        throw std::runtime_error("renderer creation failed");
     surface = SDL_GetWindowSurface(window.get());
     loop.store(false);
-    render(initialState, surface);
+    render(initialState, surface, renderer.get());
     SDL_UpdateWindowSurface(window.get());
 }
 
@@ -24,9 +27,9 @@ template<typename State>
 void graphicspipe<State>::rendloop() {
     while(loop.load()) {
         if(phys->choose.load())
-            render(phys->current1, surface);
+            render(phys->current1, surface, renderer.get());
         else
-            render(phys->current2, surface);
+            render(phys->current2, surface, renderer.get());
         SDL_UpdateWindowSurface(window.get());
     }
 }

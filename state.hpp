@@ -19,8 +19,8 @@ class State {
     float x = 960;
     float y = 540;
     int radius = 10;
-    float vx = 2.0;
-    float vy = 2.0;
+    float vx = 400.0;
+    float vy = 400.0;
 };
 
 #endif //STATE_H
