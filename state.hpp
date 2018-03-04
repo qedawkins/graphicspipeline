@@ -2,6 +2,8 @@
 #define STATE_H
 
 #include<functional>
+#include<condition_variable>
+#include<SDL2/SDL.h>
 
 class State {
     public:
@@ -12,7 +14,8 @@ class State {
         y(copy->y),
         radius(copy->radius),
         vx(copy->vx),
-        vy(copy->vy) {};
+        vy(copy->vy),
+        quit(copy->quit) {};
     ~State();
     void step();
     int count = 0;
@@ -21,6 +24,7 @@ class State {
     int radius = 10;
     float vx = 400.0;
     float vy = 400.0;
+    std::condition_variable* quit;
 };
 
 #endif //STATE_H

@@ -18,4 +18,6 @@ void State::step() {
         y = y < 1 ? 0 : 1080;
         vy = -vy;
     }
+    if(count == 0xFE)
+        quit->notify_all();
 }
