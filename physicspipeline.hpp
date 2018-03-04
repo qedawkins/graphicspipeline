@@ -9,8 +9,8 @@
 template<typename State>
 class physicspipe {
     public:
-        physicspipe<State>();
-        physicspipe<State>(State* initialState, std::function<void(State*)> evolve);
+        physicspipe<State>() = default;
+        physicspipe<State>(State* initialState);
         ~physicspipe();
         State* current1;
         State* current2;
@@ -21,7 +21,6 @@ class physicspipe {
         std::chrono::nanoseconds ns = std::chrono::nanoseconds(500000);
         std::chrono::milliseconds ms = std::chrono::milliseconds(10);
         std::atomic<bool> loop;
-        std::function<void(State*)> step;
         void steploop();
         void steploopwait();
         std::thread sloop;

@@ -10,7 +10,7 @@ template<typename State>
 class graphicspipe {
     public:
         graphicspipe<State>() = default;
-        graphicspipe<State>(State* initialState, std::function<void(State*)> evolve, std::function<void(State*, SDL_Surface*)> rend, const int width, const int height);
+        graphicspipe<State>(State* initialState, std::function<void(State*, SDL_Surface*)> rend, const int width, const int height);
         ~graphicspipe();
         void start();
         void pause();

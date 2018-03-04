@@ -1,19 +1,9 @@
 #include "physicspipeline.hpp"
 
 template<typename State>
-physicspipe<State>::physicspipe() {
-    step = [](State* s) { };
-    current1 = new State();
-    current2 = new State();
-    choose.store(false);
-    loop.store(false);
-}
-
-template<typename State>
-physicspipe<State>::physicspipe(State* initialState, std::function<void(State*)> evolve) {
-    step = evolve;
-    current1 = initialState;
-    current2 = new State();
+physicspipe<State>::physicspipe(State* initialState) :
+    current1(new State(initialState)),
+    current2(new State(initialState)) {
     choose.store(false);
     loop.store(false);
 }
@@ -34,12 +24,12 @@ void physicspipe<State>::steploopwait() {
             start = end;
             wait = start + ns;
             if(choose.load()) {
-                step(current1);
+                current1->step();
                 choose.store(false, std::memory_order_acquire);
                 *current2 = *current1;
             }
             else {
-                step(current2);
+                current2->step();
                 choose.store(true, std::memory_order_acquire);
                 *current1 = *current2;
             }
@@ -57,12 +47,12 @@ void physicspipe<State>::steploop() {
         if(std::chrono::duration<double, std::milli>(end-start) > ms) {
             start = end;
             if(choose.load()) {
-                step(current1);
+                current1->step();
                 choose.store(false, std::memory_order_acquire);
                 *current2 = *current1;
             }
             else {
-                step(current2);
+                current2->step();
                 choose.store(true, std::memory_order_acquire);
                 *current1 = *current2;
             }
