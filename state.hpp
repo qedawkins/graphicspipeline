@@ -4,6 +4,7 @@
 #include<functional>
 #include<condition_variable>
 #include<cmath>
+#include<iostream>
 #include<SDL2/SDL.h>
 
 class State {
@@ -13,6 +14,8 @@ class State {
         count(copy->count),
         x(copy->x),
         y(copy->y),
+        ax(copy->ax),
+        ay(copy->ay),
         radius(copy->radius),
         vx(copy->vx),
         vy(copy->vy),
@@ -24,11 +27,11 @@ class State {
     int count = 0;
     float x = 960;
     float y = 540;
+    float ax = 0.0;
+    float ay = 0.0;
     int radius = 10;
     float vx = 0.0;
     float vy = 0.0;
-    float ax = 0.0;
-    float ay = 0.0;
     std::condition_variable* quit;
     std::shared_ptr<SDL_Event> event;
 };

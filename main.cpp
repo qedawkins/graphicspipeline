@@ -15,9 +15,8 @@ std::condition_variable quit;
 
 void render(State* s, SDL_Surface* surface, SDL_Renderer* renderer) {
     SDL_Rect rect = {(int)s->x - s->radius, (int)s->y - s->radius, s->radius, s->radius};
-    SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0xff, 0xff, 0xff));
+    SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, s->count, 0xff, 0xff-s->count));
     SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, 0x0, 0x0, 0x0));
-    printf("\r%f", s->x);
 }
 
 void lockThread() {
