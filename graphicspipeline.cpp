@@ -1,21 +1,13 @@
 #include "graphicspipeline.hpp"
 
 template<typename State>
-graphicspipe<State>::graphicspipe(State* initialState, std::function<void(State*, SDL_Surface*, SDL_Renderer*)> rend, const int width, const int height) :
-    window(sdl2::make_window("pong", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN)),
-    renderer(sdl2::make_renderer(window.get(), -1, 0)) {
-    render = rend;
-    phys = std::unique_ptr<physicspipe<State> >(new physicspipe<State>(initialState));
-    s_width = width;
-    s_height = height;
-    if(window == nullptr)
-        throw std::runtime_error("window creation failed");
-    if(renderer == nullptr)
-        throw std::runtime_error("renderer creation failed");
-    surface = SDL_GetWindowSurface(window.get());
+graphicspipe<State>::graphicspipe(State* initialState, std::function<void(State*, SDL_Renderer*)> rend, const int width, const int height) :
+    s_width(width),
+    s_height(height),
+    init(*initialState),
+    render(rend),
+    phys(std::unique_ptr<physicspipe<State> >(new physicspipe<State>(initialState))) {
     loop.store(false);
-    render(initialState, surface, renderer.get());
-    SDL_UpdateWindowSurface(window.get());
 }
 
 template<typename State>
@@ -25,12 +17,26 @@ graphicspipe<State>::~graphicspipe() {
 
 template<typename State>
 void graphicspipe<State>::rendloop() {
+    SDL_Window* window = SDL_CreateWindow("pong", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, s_width, s_height, SDL_WINDOW_SHOWN);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if(window == nullptr) {
+        std::cout << SDL_GetError() << std::endl;
+        throw std::runtime_error("window creation failed");
+    }
+    if(renderer == nullptr) {
+        std::cout << SDL_GetError() << std::endl;
+        throw std::runtime_error("renderer creation failed");
+    }
+    render(&init, renderer);
+    SDL_RenderPresent(renderer);
     while(loop.load()) {
-        if(phys->choose.load())
-            render(phys->current1, surface, renderer.get());
-        else
-            render(phys->current2, surface, renderer.get());
-        SDL_UpdateWindowSurface(window.get());
+        if(phys->choose.load()) {
+            render(phys->current1, renderer);
+        }
+        else {
+            render(phys->current2, renderer);
+        }
+        SDL_RenderPresent(renderer);
     }
 }
 

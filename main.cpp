@@ -13,12 +13,14 @@ const int SCREEN_HEIGHT = 1080;
 std::mutex mtx;
 std::condition_variable quit;
 
-void render(State* s, SDL_Surface* surface, SDL_Renderer* renderer) {
+inline void render(State* s, SDL_Renderer* renderer) {
     SDL_Rect rect = {(int)s->x - s->radius, (int)s->y - s->radius, s->radius, s->radius};
-    SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, s->count, 0xff, 0xff-s->count));
-    SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, 0x0, 0x0, 0x0));
-    SDL_FillRect(surface, &s->p1, SDL_MapRGB(surface->format, 0x0, 0x0, 0x0));
-    SDL_FillRect(surface, &s->p2, SDL_MapRGB(surface->format, 0x0, 0x0, 0x0));
+    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, s->count, 0xff);
+    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 0xff);
+    SDL_RenderFillRect(renderer, &rect);
+    SDL_RenderFillRect(renderer, &s->p1);
+    SDL_RenderFillRect(renderer, &s->p2);
 }
 
 void lockThread() {
