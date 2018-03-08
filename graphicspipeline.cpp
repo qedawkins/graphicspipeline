@@ -46,6 +46,18 @@ void graphicspipe<helper, State>::render(State* s, SDL_Renderer* rend) {
 }
 
 template<typename helper, typename State>
+void graphicspipe<helper, State>::loadTextures(SDL_Renderer* rend, std::string path[3]) {
+    for(int i = 0; i < 4; i++) {
+        sprites[i]->loadTexture(path[i], rend);
+    }
+}
+
+template<typename helper, typename State>
+void graphicspipe<helper, State>::loadBackground(SDL_Renderer* rend, std::string path) {
+    background->loadTexture(path, rend);
+}
+
+template<typename helper, typename State>
 void graphicspipe<helper, State>::start() {
     loop.store(true);
     phys->start();

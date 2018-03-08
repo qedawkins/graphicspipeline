@@ -1,12 +1,12 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include<stdexcept>
-#include<iostream>
 #include "physicspipeline.hpp"
 #include "physicspipeline.cpp"
-#include<SDL2/SDL.h>
+#include "texture.hpp"
+#include "texture.cpp"
 #include<system_error>
+#include<string>
 
 template<typename helper, typename State>
 class graphicspipe {
@@ -19,10 +19,14 @@ class graphicspipe {
     private:
         int s_width;
         int s_height;
+        texture* background;
+        texture* sprites[3];
         State init;
         std::atomic<bool> loop;
-        void render(State*, SDL_Renderer*);
+        void render(State* s, SDL_Renderer* rend);
         void rendloop();
+        void loadTextures(SDL_Renderer* rend, std::string path[3]);
+        void loadBackground(SDL_Renderer* rend, std::string path);
         std::thread gloop;
         std::unique_ptr<physicspipe<helper, State> > phys;
 };
