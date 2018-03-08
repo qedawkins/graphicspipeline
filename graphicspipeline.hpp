@@ -12,7 +12,7 @@ template<typename helper, typename State>
 class graphicspipe {
     public:
         graphicspipe<helper, State>() = default;
-        graphicspipe<helper, State>(State* initialState, std::function<void(State*, SDL_Renderer*)> rend, const int width, const int height);
+        graphicspipe<helper, State>(State* initialState, const int width, const int height);
         ~graphicspipe();
         void start();
         void pause();
@@ -21,7 +21,7 @@ class graphicspipe {
         int s_height;
         State init;
         std::atomic<bool> loop;
-        std::function<void(State*, SDL_Renderer*)> render;
+        void render(State*, SDL_Renderer*);
         void rendloop();
         std::thread gloop;
         std::unique_ptr<physicspipe<helper, State> > phys;
