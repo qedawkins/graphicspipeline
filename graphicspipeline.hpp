@@ -5,7 +5,8 @@
 #include<iostream>
 #include "physicspipeline.hpp"
 #include "physicspipeline.cpp"
-#include "windowresources.hpp"
+#include<SDL2/SDL.h>
+#include<system_error>
 
 template<typename State>
 class graphicspipe {
