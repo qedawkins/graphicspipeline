@@ -12,8 +12,9 @@ target_link_libraries(state SDL2)
 add_library(physicspipeline STATIC physicspipeline.cpp)
 add_library(graphicspipeline STATIC graphicspipeline.cpp)
 target_link_libraries(graphicspipeline SDL2 physicspipeline)
+add_library(physicshelper STATIC physicshelper.cpp)
 
 add_executable(game main.cpp)
-target_link_libraries(game state graphicspipeline)
+target_link_libraries(game state graphicspipeline physicshelper)
 
 install(TARGETS game DESTINATION bin)

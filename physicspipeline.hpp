@@ -6,15 +6,13 @@
 #include<atomic>
 #include<chrono>
 
-template<typename State>
+template<typename helper, typename State>
 class physicspipe {
     public:
-        physicspipe<State>() = default;
-        physicspipe<State>(State* initialState);
+        physicspipe<helper, State>() = default;
+        physicspipe<helper, State>(State* initialState);
         ~physicspipe();
-        State* current1;
-        State* current2;
-        std::atomic<bool> choose;
+        std::unique_ptr<helper> help;
         void start();
         void pause();
     private:

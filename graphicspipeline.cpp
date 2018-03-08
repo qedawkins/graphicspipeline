@@ -1,22 +1,22 @@
 #include "graphicspipeline.hpp"
 
-template<typename State>
-graphicspipe<State>::graphicspipe(State* initialState, std::function<void(State*, SDL_Renderer*)> rend, const int width, const int height) :
+template<typename helper, typename State>
+graphicspipe<helper, State>::graphicspipe(State* initialState, std::function<void(State*, SDL_Renderer*)> rend, const int width, const int height) :
     s_width(width),
     s_height(height),
     init(*initialState),
     render(rend),
-    phys(std::unique_ptr<physicspipe<State> >(new physicspipe<State>(initialState))) {
+    phys(std::unique_ptr<physicspipe<helper, State> >(new physicspipe<helper, State>(initialState))) {
     loop.store(false);
 }
 
-template<typename State>
-graphicspipe<State>::~graphicspipe() {
+template<typename helper, typename State>
+graphicspipe<helper, State>::~graphicspipe() {
     pause();
 }
 
-template<typename State>
-void graphicspipe<State>::rendloop() {
+template<typename helper, typename State>
+void graphicspipe<helper, State>::rendloop() {
     SDL_Window* window = SDL_CreateWindow("pong", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, s_width, s_height, SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if(window == nullptr) {
@@ -30,25 +30,20 @@ void graphicspipe<State>::rendloop() {
     render(&init, renderer);
     SDL_RenderPresent(renderer);
     while(loop.load()) {
-        if(phys->choose.load()) {
-            render(phys->current1, renderer);
-        }
-        else {
-            render(phys->current2, renderer);
-        }
+        render(phys->help->current.load(), renderer);
         SDL_RenderPresent(renderer);
     }
 }
 
-template<typename State>
-void graphicspipe<State>::start() {
+template<typename helper, typename State>
+void graphicspipe<helper, State>::start() {
     loop.store(true);
     phys->start();
-    std::thread gloop(&graphicspipe<State>::rendloop, this);
+    std::thread gloop(&graphicspipe<helper, State>::rendloop, this);
     gloop.detach();
 }
 
-template<typename State>
-void graphicspipe<State>::pause() {
+template<typename helper, typename State>
+void graphicspipe<helper, State>::pause() {
     loop.store(false);
 }

@@ -7,6 +7,8 @@
 #include "graphicspipeline.cpp"
 #include "state.hpp"
 #include "state.cpp"
+#include "physicshelper.hpp"
+#include "physicshelper.cpp"
 
 const int SCREEN_WIDTH = 1920;
 const int SCREEN_HEIGHT = 1080;
@@ -33,7 +35,7 @@ int main(int argc, char** argv) {
     std::shared_ptr<SDL_Event> e = std::make_shared<SDL_Event>();
     is->quit = &quit;
     is->event = e;
-    graphicspipe<State>* graph = new graphicspipe<State>(is, render, SCREEN_WIDTH, SCREEN_HEIGHT);
+    graphicspipe<physicshelper<State>, State>* graph = new graphicspipe<physicshelper<State>, State>(is, render, SCREEN_WIDTH, SCREEN_HEIGHT);
     graph->start();
     std::thread wait(lockThread);
     wait.join();
