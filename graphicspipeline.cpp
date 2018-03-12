@@ -21,7 +21,7 @@ graphicspipe<helper, State>::~graphicspipe() {
 template<typename helper, typename State>
 void graphicspipe<helper, State>::rendloop() {
     SDL_Window* window = SDL_CreateWindow("pong", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, s_width, s_height, SDL_WINDOW_SHOWN);
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if(window == nullptr) {
         std::cout << SDL_GetError() << std::endl;
         throw std::runtime_error("window creation failed");
@@ -45,7 +45,7 @@ void graphicspipe<helper, State>::rendloop() {
         if(std::chrono::duration<float, std::milli>(end-start) > std::chrono::milliseconds(1000)) {
             start = std::chrono::high_resolution_clock::now();
             std::cout << framerate << std::endl;
-            framerate = 0;
+            //framerate = 0;
         }
     }
 }
