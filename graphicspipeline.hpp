@@ -19,6 +19,7 @@ class graphicspipe {
     private:
         int s_width;
         int s_height;
+        int framerate = 0;
         texture* background;
         texture* sprites[3];
         State init;
