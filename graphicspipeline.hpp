@@ -26,6 +26,7 @@ class graphicspipe {
         std::atomic<bool> loop;
         void render(State* s, SDL_Renderer* rend);
         void rendloop();
+        void rendloopFRAMERATE();
         void loadTextures(SDL_Renderer* rend, std::string path[3]);
         void loadBackground(SDL_Renderer* rend, std::string path);
         std::thread gloop;
