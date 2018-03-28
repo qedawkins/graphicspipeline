@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(game)
 
-find_library(SDL2 /usr/include/)
-find_library(SDL2_image /usr/include/)
+find_library(SDL2 REQUIRED)
+find_library(SDL2_image REQUIRED)
 add_library(state STATIC state.cpp)
 add_library(texture STATIC texture.cpp)
 target_link_libraries(state SDL2)
