@@ -22,12 +22,14 @@ class graphicspipe {
         int framerate = 0;
         texture* background;
         texture* sprites[3];
+        texture* characters[10];
         State init;
         std::atomic<bool> loop;
         void render(State* s, SDL_Renderer* rend);
         void rendloop();
         void rendloopFRAMERATE();
         void loadTextures(SDL_Renderer* rend, std::string path[3]);
+        void loadNumbers(SDL_Renderer* rend);
         void loadBackground(SDL_Renderer* rend, std::string path);
         std::thread gloop;
         std::unique_ptr<physicspipe<helper, State> > phys;

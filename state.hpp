@@ -23,6 +23,8 @@ class State {
         p2y(copy->p2y),
         v1y(copy->v1y),
         v2y(copy->v2y),
+        scorel(copy->scorel),
+        scorer(copy->scorer),
         p1(copy->p1),
         p2(copy->p2),
         quit(copy->quit),
@@ -42,6 +44,8 @@ class State {
     float p2y = 0.0;
     float v1y = 0.0;
     float v2y = 0.0;
+    uint16_t scorel = 0;
+    uint16_t scorer = 0;
     SDL_Rect p1 = {20, 500, 20, 80};
     SDL_Rect p2 = {1880, 500, 20, 80};
     std::condition_variable* quit;
